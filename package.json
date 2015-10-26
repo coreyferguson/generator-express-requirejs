@@ -10,6 +10,10 @@
     "grunt",
     "bower"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:coreyferguson/generator-express-requirejs.git"
+  },
   "author": "Corey Ferguson <corey.t.ferguson@gmail.com>",
   "license": "MIT",
   "files": [
