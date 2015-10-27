@@ -27,14 +27,22 @@ module.exports = function(grunt) {
         prereleaseName: false,
         regExp: false
       }
+    },
+
+    mochaTest: {
+      test: {
+        src: ['test/**/*.js']
+      }
     }
 
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-bump');
+  grunt.loadNpmTasks('grunt-mocha-test');
+
 
   // Default task(s).
-  grunt.registerTask('default', ['jshint']);
+  grunt.registerTask('default', ['jshint', 'mochaTest']);
 
 };

@@ -17,9 +17,13 @@
   "author": "Corey Ferguson <corey.t.ferguson@gmail.com>",
   "license": "MIT",
   "files": [
-  	"app"
+    "app"
   ],
   "dependencies": {
     "yeoman-generator": "^0.21.1"
+  },
+  "devDependencies": {
+    "mocha": "~2.3.3",
+    "grunt-mocha-test": "~0.12.7"
   }
 }
