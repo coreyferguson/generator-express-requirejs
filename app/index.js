@@ -1,4 +1,5 @@
 var generators = require('yeoman-generator');
+var fs = require('fs');
 
 module.exports = generators.Base.extend({
 
@@ -8,13 +9,33 @@ module.exports = generators.Base.extend({
   },
 
   prompting: function() {
+    var that = this;
     var done = this.async();
     this.prompt([
       {
         type: 'input',
         name: 'name',
         message: 'Your project name',
-        default: this.appname
+        default: this.appname,
+        validate: function(name) {
+          // validate project file/folder name doesn't already exist
+          if (name === undefined || name === null || name === '') {
+            return false;
+          } else {
+            var destinationPath = that.destinationPath(name);
+            try {
+              fs.statSync(destinationPath);
+            }
+            catch (error) {
+              if (error.code === 'ENOENT') {
+                return true;
+              } else {
+                throw error;
+              }
+            }
+            return 'A file/folder with this name already exists.';
+          }
+        }
       },
       {
         type: 'confirm',
