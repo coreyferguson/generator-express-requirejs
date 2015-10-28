@@ -1,20 +1,21 @@
 
-# express-requirejs
+# express-requirejs Yeoman Generator
 
 ## Summary
 
-Yeoman generator for an express web application with require.js dependency management.
+[Yeoman](http://yeoman.io) generator for an express web application with require.js dependency management.
 
 Features:
 
-Technology                                            | Required
-------------------------------------------------      | --------
-[express](https://github.com/strongloop/express)      | Yes
-[requirejs](http://requirejs.org)                     | Yes
-[bower](http://bower.io)                              | Yes
-[git](https://git-scm.com)                            | No
-[grunt](http://gruntjs.com/)                          | No
-[grunt-bump](https://github.com/vojtajina/grunt-bump) | No
+Technology                                                   | Required
+------------------------------------------------------------ | --------
+[Express](https://github.com/strongloop/express)             | Yes
+[RequireJS](http://requirejs.org)                            | Yes
+[Bower](http://bower.io)                                     | Yes
+[bower-requirejs](https://github.com/yeoman/bower-requirejs) | Yes
+[Git](https://git-scm.com)                                   | No
+[Grunt](http://gruntjs.com/)                                 | No
+[grunt-bump](https://github.com/vojtajina/grunt-bump)        | No
 
 ## Usage
 
@@ -22,6 +23,8 @@ Technology                                            | Required
 npm install -g generator-express-requirejs
 yo express-requirejs name-of-project
 ```
+
+Check [here](PROJECT.md) for more in-depth information about the generated project.
 
 ## Contributor Usage
 
