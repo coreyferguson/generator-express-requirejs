@@ -70,8 +70,13 @@ module.exports = generators.Base.extend({
         this.destinationPath());
       if (this.environment.isGitAvailable) {
         this.fs.copyTpl(
-          this.templatePath('git/**/.*'),
+          this.templatePath('git/**/*'),
           this.destinationPath());
+        // rename destionation gitignore files to .gitignore
+        // https://github.com/npm/npm/issues/1862
+        this.fs.move(
+          this.destinationPath('gitignore'), 
+          this.destinationPath('.gitignore'));
       }
     }
   },
@@ -116,12 +121,14 @@ module.exports = generators.Base.extend({
     },
     git: function() {
       if (this.environment.isGitAvailable) {
+        // initiate local git repo
+        var spawnOptions = { stdio: ['ignore', 'ignore', 'ignore'] };
         var that = this;
-        that.spawnCommand('git', ['init'])
+        that.spawnCommand('git', ['init'], spawnOptions)
         .on('close', function(code) {
-          that.spawnCommand('git', ['add', '--all'])
+          that.spawnCommand('git', ['add', '--all'], spawnOptions)
           .on('close', function(code) {
-            that.spawnCommand('git', ['commit', '-m', 'init']);
+            that.spawnCommand('git', ['commit', '-m', 'init'], spawnOptions);
           });
         });
       }
