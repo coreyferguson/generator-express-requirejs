@@ -1,4 +1,8 @@
 
+# TODO
+
+- JS Lint
+
 # express-requirejs Yeoman Generator
 
 ## Summary
