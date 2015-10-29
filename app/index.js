@@ -110,17 +110,17 @@ module.exports = generators.Base.extend({
       this.npmInstall(['bower-requirejs'], { 'saveDev': true });
     },
     bower: function() {
-      this.bowerInstall('requirejs');
+      this.bowerInstall('requirejs', {'saveDev': true});
     },
     grunt: function() {
       // grunt
       if (this.environment.isGruntAvailable) {
-        this.npmInstall('grunt');
+        this.npmInstall('grunt', { 'saveDev': true });
         this.gruntfile.insertConfig('pkg', 'grunt.file.readJSON("package.json")');
 
         // grunt-bump
         if (this.environment.isGruntBumpAvailable) {
-          this.npmInstall('grunt-bump');
+          this.npmInstall('grunt-bump', { 'saveDev': true });
           this.gruntfile.insertConfig('bump', "{ options: { push: false } }");
           this.gruntfile.loadNpmTasks('grunt-bump');
         }
