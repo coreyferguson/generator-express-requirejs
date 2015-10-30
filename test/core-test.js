@@ -9,7 +9,8 @@ describe('required features', function() {
       .withPrompts({
         name: 'test',
         isGitAvailable: false,
-        isGruntAvailable: false
+        isGruntAvailable: false,
+        isJsHintAvailable: false
       })
       .on('end', done);
   });

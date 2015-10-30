@@ -8,9 +8,10 @@ describe('grunt', function() {
     helpers.run(path.join(__dirname, '../app'))
       .withPrompts({
         name: 'test',
-        isGitAvailable: true,
+        isGitAvailable: false,
         isGruntAvailable: true,
-        isGruntBumpAvailable: false
+        isGruntBumpAvailable: false,
+        isJsHintAvailable: false
       })
       .on('end', done);
   });
@@ -19,6 +20,16 @@ describe('grunt', function() {
     assert.file([
       'Gruntfile.js',
     ]);
+    assert.fileContent('Gruntfile.js', /pkg: grunt.file.readJSON\('package.json'\)/);
+  });
+
+  it('should not add optional modules in Gruntfile.js', function() {
+    // grunt-bump
+    assert.noFileContent('Gruntfile.js', /grunt.loadNpmTasks\('grunt-bump'\);/);
+    assert.noFileContent('Gruntfile.js', /bump: \{/);
+    // jshint
+    assert.noFileContent('Gruntfile.js', /grunt.loadNpmTasks\('grunt-contrib-jshint'\);/);
+    assert.noFileContent('Gruntfile.js', /jshint: {/);
   });
 
 });

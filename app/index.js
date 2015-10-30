@@ -57,6 +57,15 @@ module.exports = generators.Base.extend({
         when: function(answers) {
           return answers.isGruntAvailable && answers.isGitAvailable;
         }
+      },
+      {
+        type: 'confirm',
+        name: 'isJsHintAvailable',
+        message: 'Configure jshint',
+        default: true,
+        when: function(answers) {
+          return answers.isGruntAvailable;
+        }
       }
     ], function (answers) {
       this.project = {
@@ -65,14 +74,17 @@ module.exports = generators.Base.extend({
       this.environment = {
         isGitAvailable: answers.isGitAvailable,
         isGruntAvailable: answers.isGruntAvailable,
-        isGruntBumpAvailable: (answers.isGruntAvailable ? answers.isGruntBumpAvailable : false)
+        isGruntBumpAvailable: (answers.isGruntAvailable ? answers.isGruntBumpAvailable : false),
+        isJsHintAvailable: answers.isJsHintAvailable
       };
       done();
     }.bind(this));
   },
 
   configuring: function () {
+    // create project in new folder with chosen appname
     this.destinationRoot(this.appname);
+    // save model object for use in templates
     this.config.set('templateModel', {
       project: this.project,
       environment: this.environment
@@ -80,7 +92,7 @@ module.exports = generators.Base.extend({
   },
 
   writing: {
-    express: function() {
+    templates: function() {
       var model = this.config.get('templateModel');
       this.fs.copyTpl(
         this.templatePath('writing/**/*'),
@@ -89,6 +101,8 @@ module.exports = generators.Base.extend({
       this.fs.copyTpl(
         this.templatePath('writing/**/.*'),
         this.destinationPath());
+    },
+    git: function() {
       if (this.environment.isGitAvailable) {
         this.fs.copyTpl(
           this.templatePath('git/**/*'),
@@ -115,6 +129,7 @@ module.exports = generators.Base.extend({
     grunt: function() {
       // grunt
       if (this.environment.isGruntAvailable) {
+        var defaultGruntTasks = [];
         this.npmInstall('grunt', { 'saveDev': true });
         this.gruntfile.insertConfig('pkg', 'grunt.file.readJSON("package.json")');
 
@@ -125,6 +140,18 @@ module.exports = generators.Base.extend({
           this.gruntfile.loadNpmTasks('grunt-bump');
         }
 
+        // jshint
+        if (this.environment.isJsHintAvailable) {
+          this.npmInstall('grunt-contrib-jshint', { 'saveDev': true });
+          this.gruntfile.insertConfig('jshint', "{ 'grunt': 'Gruntfile.js', 'app': 'public/js/**/*.js' }");
+          this.gruntfile.loadNpmTasks('grunt-contrib-jshint');
+          defaultGruntTasks.push('jshint');
+        }
+
+        // register default task
+        if (defaultGruntTasks.length > 0) {
+          this.gruntfile.registerTask('default', defaultGruntTasks);
+        }
       }
     }
   },

@@ -9,7 +9,8 @@ describe('git', function() {
       .withPrompts({
         name: 'test',
         isGitAvailable: true,
-        isGruntAvailable: false
+        isGruntAvailable: false,
+        isJsHintAvailable: false
       })
       .on('end', done);
   });
