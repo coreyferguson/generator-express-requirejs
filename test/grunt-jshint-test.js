@@ -8,18 +8,29 @@ describe('grunt-jshint', function() {
     helpers.run(path.join(__dirname, '../app'))
       .withPrompts({
         name: 'test',
-        isGitAvailable: false,
-        isGruntAvailable: true,
+        isGitAvailable:       false,
+        isGruntAvailable:     true,
         isGruntBumpAvailable: false,
-        isJsHintAvailable: true
+        isJsHintAvailable:    true,
+        isMochaAvailable:     false
       })
       .on('end', done);
   });
 
-  it('should add relevant information in Gruntfile.js', function() {
+  it('should load npm task in Gruntfile.js', function() {
     assert.fileContent('Gruntfile.js', /grunt.loadNpmTasks\('grunt-contrib-jshint'\);/);
+  });
+    
+  it('should define bump config in Gruntfile.js', function() {
     assert.fileContent('Gruntfile.js', /jshint: {/);
-    assert.fileContent('Gruntfile.js', /grunt.registerTask\('default', \[.*'jshint'/);
+  });
+    
+  it('should register test task in Gruntfile.js', function() {
+    assert.fileContent('Gruntfile.js', /grunt.registerTask\('test', \[.*'jshint'/);
+  });
+
+  it('should register default task in Gruntfile.js', function() {
+    assert.fileContent('Gruntfile.js', /grunt.registerTask\('default', \[.*'test'/);
   });
 
 });

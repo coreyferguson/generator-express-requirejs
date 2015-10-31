@@ -7,10 +7,12 @@ describe('git', function() {
   before(function(done) {
     helpers.run(path.join(__dirname, '../app'))
       .withPrompts({
-        name: 'test',
-        isGitAvailable: true,
-        isGruntAvailable: false,
-        isJsHintAvailable: false
+        name:                 'test',
+        isGitAvailable:       true,
+        isGruntAvailable:     false,
+        isGruntBumpAvailable: false,
+        isJsHintAvailable:    false,
+        isMochaAvailable:     false
       })
       .on('end', done);
   });

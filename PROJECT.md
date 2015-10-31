@@ -3,18 +3,30 @@
 
 ## Directory Structure
 
-File                          | Short Description
------------------------------ | -----------------
-Gruntfile.js                  | [Grunt](http://gruntjs.com/) build file.
-public/js/index.js            | Browser JS entry-point. **Your code goes here.**
-public/js/requirejs-config.js | [RequireJS](http://requirejs.org/) shim config. See below section on *Frontend Dependencies*.
-public/index.html             | Browser HTML entry-point. **Your code goes here.**
-.gitignore                    | [Git](https://git-scm.com) ignore file.
-.bowerrc                      | [bower-requirejs](https://github.com/yeoman/bower-requirejs) hook
-.yo-rc.json                   | [Yeoman](http://yeoman.io) configuration file.
-bower.json                    | [Bower](http://bower.io) for frontend dependencies.
-package.json                  | [npm](https://www.npmjs.com) for backend dependencies.
-app.js                        | Server-side entry-point. **Your code goes here.**
+	$ tree
+	.
+	├── bower.json // Bower for frontend dependencies.
+	├── Gruntfile.js // Grunt build file.
+	├── package.json // npm for backend dependencies.
+	├── src
+	│   ├── client
+	│   │   ├── index.html // Browser HTML entry-point. **Your code goes here.**
+	│   │   ├── js
+	│   │   │   ├── app.js // Browser JS entry-point. **Your code goes here.**
+	│   │   │   └── example-component.js // An example that can be deleted.
+	│   │   └── requirejs-main.js // RequireJS shim config. See below section on *Frontend Dependencies*.
+	│   └── server
+	│       └── app.js // Server-side entry-point. **Your code goes here.**
+	└── test
+	    ├── client
+	    │   ├── karma.conf.js // Karma test runner configuration.
+	    │   ├── spec
+	    │   │   ├── app-test.js // unit test for src/client/js/app.js
+	    │   │   └── example-test.js // An example that can be deleted.
+	    │   └── test-main.js // RequireJS shim config for test suite. See below section on *Frontend Dependencies*.
+	    └── server
+	        └── example-test.js // An example that can be deleted.
+
 
 ## Frontend Dependencies
 
@@ -25,3 +37,25 @@ bower install --save-dev dependency-name
 ```
 
 The `.bowerrc` hook will automatically wire this up for RequireJS to use. Take a look at `public/js/requirejs-config.js` to see.
+
+Unfortunately, **the paths are not automatically wired** into the `test/client/test-main.js`. You can manually copy+paste from `public/js/requirejs-config.js` after installing with bower.
+
+## Usage
+
+### Starting the web application
+
+```bash
+node src/server/app.js
+```
+
+### Building and testing the application
+
+```bash
+grunt
+```
+
+### Running Karma in continous mode
+
+```bash
+grunt karma:continuous
+```

@@ -16,6 +16,10 @@ Technology                                                   | Required
 [Git](https://git-scm.com)                                   | No
 [Grunt](http://gruntjs.com/)                                 | No
 [grunt-bump](https://github.com/vojtajina/grunt-bump)        | No
+[JSHint](http://jshint.com/docs/)                            | No
+[Karma](http://karma-runner.github.io/0.13/index.html)       | No
+[Mocha](http://mochajs.org/)                                 | No
+[Chai](http://chaijs.com/)                                   | No
 
 ## Usage
 

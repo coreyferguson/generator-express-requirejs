@@ -40,13 +40,13 @@ module.exports = generators.Base.extend({
       {
         type: 'confirm',
         name: 'isGitAvailable',
-        message: 'Configure git',
+        message: 'Configure Git',
         default: true
       },
       {
         type: 'confirm',
         name: 'isGruntAvailable',
-        message: 'Configure grunt',
+        message: 'Configure Grunt',
         default: true
       },
       {
@@ -61,11 +61,17 @@ module.exports = generators.Base.extend({
       {
         type: 'confirm',
         name: 'isJsHintAvailable',
-        message: 'Configure jshint',
+        message: 'Configure JSHint',
         default: true,
         when: function(answers) {
           return answers.isGruntAvailable;
         }
+      },
+      {
+        type: 'confirm',
+        name: 'isMochaAvailable',
+        message: 'Configure unit testing with Karma, Mocha and Chai',
+        default: true
       }
     ], function (answers) {
       this.project = {
@@ -75,7 +81,8 @@ module.exports = generators.Base.extend({
         isGitAvailable: answers.isGitAvailable,
         isGruntAvailable: answers.isGruntAvailable,
         isGruntBumpAvailable: (answers.isGruntAvailable ? answers.isGruntBumpAvailable : false),
-        isJsHintAvailable: answers.isJsHintAvailable
+        isJsHintAvailable: answers.isJsHintAvailable,
+        isMochaAvailable: answers.isMochaAvailable
       };
       done();
     }.bind(this));
@@ -113,6 +120,13 @@ module.exports = generators.Base.extend({
           this.destinationPath('gitignore'), 
           this.destinationPath('.gitignore'));
       }
+    },
+    mocha: function() {
+      if (this.environment.isMochaAvailable) {
+        this.fs.copyTpl(
+          this.templatePath('mocha/**/*'),
+          this.destinationPath());
+      }
     }
   },
 
@@ -130,6 +144,7 @@ module.exports = generators.Base.extend({
       // grunt
       if (this.environment.isGruntAvailable) {
         var defaultGruntTasks = [];
+        var testGruntTasks = [];
         this.npmInstall('grunt', { 'saveDev': true });
         this.gruntfile.insertConfig('pkg', 'grunt.file.readJSON("package.json")');
 
@@ -143,15 +158,46 @@ module.exports = generators.Base.extend({
         // jshint
         if (this.environment.isJsHintAvailable) {
           this.npmInstall('grunt-contrib-jshint', { 'saveDev': true });
-          this.gruntfile.insertConfig('jshint', "{ 'grunt': 'Gruntfile.js', 'app': 'public/js/**/*.js' }");
+          this.gruntfile.insertConfig('jshint', "{ 'grunt': 'Gruntfile.js', 'app': 'src/client/js/**/*.js' }");
           this.gruntfile.loadNpmTasks('grunt-contrib-jshint');
-          defaultGruntTasks.push('jshint');
+          testGruntTasks.push('jshint');
+        }
+
+        // mocha
+        if (this.environment.isMochaAvailable) {
+          // TODO: non-grunt-dependencies outside of "grunt" task
+          this.npmInstall('grunt-karma', { 'saveDev': true });
+          this.npmInstall('grunt-mocha-test', { 'saveDev': true });
+          this.gruntfile.insertConfig('mochaTest', "{ test: { src: ['test/server/**/*.js'] } }");
+          this.gruntfile.insertConfig('karma', "{ continuous: { configFile: 'test/client/karma.conf.js' }, single: { configFile: 'test/client/karma.conf.js', singleRun: true, browsers: ['PhantomJS'] } }");
+          this.gruntfile.loadNpmTasks('grunt-mocha-test');
+          this.gruntfile.loadNpmTasks('grunt-karma');
+          testGruntTasks.push('mochaTest');
+          testGruntTasks.push('karma:single');
         }
 
         // register default task
+        if (testGruntTasks.length > 0) {
+          this.gruntfile.registerTask('test', testGruntTasks);
+          defaultGruntTasks.push('test');
+        }
         if (defaultGruntTasks.length > 0) {
           this.gruntfile.registerTask('default', defaultGruntTasks);
         }
+      }
+    },
+    mocha: function() {
+      if (this.environment.isMochaAvailable) {
+        this.npmInstall('chai', { 'saveDev': true });
+        this.npmInstall('karma', { 'saveDev': true });
+        this.npmInstall('karma-chai', { 'saveDev': true });
+        this.npmInstall('karma-chrome-launcher', { 'saveDev': true });
+        this.npmInstall('karma-mocha', { 'saveDev': true });
+        this.npmInstall('karma-phantomjs-launcher', { 'saveDev': true });
+        this.npmInstall('karma-requirejs', { 'saveDev': true });
+        this.npmInstall('mocha', { 'saveDev': true });
+        this.npmInstall('phantomjs', { 'saveDev': true });
+        this.npmInstall('requirejs', { 'saveDev': true });
       }
     }
   },
@@ -170,13 +216,17 @@ module.exports = generators.Base.extend({
     git: function() {
       if (this.environment.isGitAvailable) {
         // initiate local git repo
+        var done = this.async();
         var spawnOptions = { stdio: ['ignore', 'ignore', 'ignore'] };
         var that = this;
         that.spawnCommand('git', ['init'], spawnOptions)
         .on('close', function(code) {
           that.spawnCommand('git', ['add', '--all'], spawnOptions)
           .on('close', function(code) {
-            that.spawnCommand('git', ['commit', '-m', 'init'], spawnOptions);
+            that.spawnCommand('git', ['commit', '-m', 'init'], spawnOptions)
+            .on('close', function() {
+              done();
+            });
           });
         });
       }

@@ -7,23 +7,25 @@ describe('required features', function() {
   before(function(done) {
     helpers.run(path.join(__dirname, '../app'))
       .withPrompts({
-        name: 'test',
-        isGitAvailable: false,
-        isGruntAvailable: false,
-        isJsHintAvailable: false
+        name:                 'test',
+        isGitAvailable:       false,
+        isGruntAvailable:     false,
+        isGruntBumpAvailable: false,
+        isJsHintAvailable:    false,
+        isMochaAvailable:     false
       })
       .on('end', done);
   });
 
   it('should copy required files', function() {
       assert.file([
-        'app.js',
+        'src/server/app.js',
         'bower.json',
         '.bowerrc',
         'package.json',
-        'public/index.html',
-        'public/js/index.js',
-        'public/js/requirejs-config.js'
+        'src/client/index.html',
+        'src/client/js/app.js',
+        'src/client/requirejs-main.js'
       ]);
   });
 
@@ -31,7 +33,8 @@ describe('required features', function() {
     assert.noFile([
       'Gruntfile.js',
       '.gitignore',
-      '.git'
+      '.git',
+      'test'
     ]);
   });
 

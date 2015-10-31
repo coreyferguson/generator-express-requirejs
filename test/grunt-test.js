@@ -8,10 +8,11 @@ describe('grunt', function() {
     helpers.run(path.join(__dirname, '../app'))
       .withPrompts({
         name: 'test',
-        isGitAvailable: false,
-        isGruntAvailable: true,
+        isGitAvailable:       false,
+        isGruntAvailable:     true,
         isGruntBumpAvailable: false,
-        isJsHintAvailable: false
+        isJsHintAvailable:    false,
+        isMochaAvailable:     false
       })
       .on('end', done);
   });
@@ -30,6 +31,9 @@ describe('grunt', function() {
     // jshint
     assert.noFileContent('Gruntfile.js', /grunt.loadNpmTasks\('grunt-contrib-jshint'\);/);
     assert.noFileContent('Gruntfile.js', /jshint: {/);
+    // mocha
+    assert.noFileContent('Gruntfile.js', /grunt.loadNpmTasks\('grunt-mocha-test'\);/);
+    assert.noFileContent('Gruntfile.js', /mochaTest: \{/);
   });
 
 });

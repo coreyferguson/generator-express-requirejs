@@ -8,16 +8,20 @@ describe('grunt-bump', function() {
     helpers.run(path.join(__dirname, '../app'))
       .withPrompts({
         name: 'test',
-        isGitAvailable: true,
-        isGruntAvailable: true,
+        isGitAvailable:       true,
+        isGruntAvailable:     true,
         isGruntBumpAvailable: true,
-        isJsHintAvailable: false
+        isJsHintAvailable:    false,
+        isMochaAvailable:     false
       })
       .on('end', done);
   });
 
-  it('should add relevant information in Gruntfile.js', function() {
+  it('should load npm task in Gruntfile.js', function() {
     assert.fileContent('Gruntfile.js', /grunt.loadNpmTasks\('grunt-bump'\);/);
+  });
+
+  it('should define bump config in Gruntfile.js', function() {
     assert.fileContent('Gruntfile.js', /bump: {/);
   });
 
