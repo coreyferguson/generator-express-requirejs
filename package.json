@@ -1,14 +1,19 @@
 {
   "name": "generator-express-requirejs",
   "version": "0.1.5",
-  "description": "Yeoman generator for an express app with require.js dependency management. Technologies used: express, requirejs, grunt, bower.",
+  "description": "Yeoman generator for an Express app with RequireJS dependency management. Includes testing with Karma, Mocha and Chai.",
   "keywords": [
     "yeoman-generator",
     "express",
     "requirejs",
     "require-js",
+    "require.js",
     "grunt",
-    "bower"
+    "bower",
+    "karma",
+    "mocha",
+    "chai",
+    "jshint"
   ],
   "repository": {
     "type": "git",

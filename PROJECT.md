@@ -36,7 +36,7 @@ Frontend dependencies can be installed with bower:
 bower install --save-dev dependency-name
 ```
 
-The `.bowerrc` hook will automatically wire this up for RequireJS to use. Take a look at `public/js/requirejs-config.js` to see.
+The `.bowerrc` hook will automatically wire this up for RequireJS to use. Take a look at `public/js/requirejs-main.js` to see.
 
 Unfortunately, **the paths are not automatically wired** into the `test/client/test-main.js`. You can manually copy+paste from `public/js/requirejs-config.js` after installing with bower.
 
